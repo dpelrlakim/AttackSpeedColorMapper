@@ -23,6 +23,7 @@ def rgb_to_hex(r: int, g: int, b: int):
     return "#{:02x}{:02x}{:02x}".format(r, g, b)
 
 
+plus = True
 def translate_speed_to_color():
 
     screenshot = None
@@ -62,8 +63,12 @@ def translate_speed_to_color():
     # 3) convert attack speed from float to 
     (r, g, b) = speed_to_rgb(attack_speed)
 
-    print(f"attack speed: {attack_speed}")
-    
+    if plus:
+        print(f"|\\ Attack Speed: {attack_speed}")
+    else:
+        print(f"|/ Attack Speed: {attack_speed}")
+    plus = not plus
+
     # 4) update pygame screen by changing its colour
     screen.fill(rgb_to_hex(r, g, b))
     pygame.display.update()
@@ -81,6 +86,6 @@ while running:
             running = False
 
     translate_speed_to_color()
-    clock.tick(30)  # 30 FPS
+    clock.tick(10)  # 10 FPS
 
 pygame.quit()
