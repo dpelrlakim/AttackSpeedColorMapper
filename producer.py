@@ -3,6 +3,7 @@ import numpy as np
 import colorsys
 import pytesseract
 from queue import Queue
+from boxshape import BoxShape
 
 
 # red → yellow → green → cyan → blue → magenta → red
@@ -22,31 +23,34 @@ def rgb_to_hex(r: int, g: int, b: int):
     return "#{:02x}{:02x}{:02x}".format(r, g, b)
 
 
-def producer(queue: Queue):
+def producer(queue: Queue, boxshape: BoxShape):
 
     plus = True
     while True:
         
         screenshot = None
         with mss() as sct:
+            for i, monitor in enumerate(sct.monitors):
+                print(f"Monitor {i}: {monitor}")
 
             # [0] is the union virtual monitor. so indiv monitors index from 1.
             monitor = sct.monitors[1]
 
             region = { # for the ultra wide monitor
-                "top": monitor["top"] + 1375,
-                "left": monitor["left"] + 2020,
-                "width": 74,
-                "height": 25,
+                "left": monitor["left"] + boxshape.x,
+                "top": monitor["top"] + boxshape.y,
+                "width": boxshape.width,
+                "height": boxshape.height,
             }
 
         # 1) capture portion of screen to extract image of attack speed
             screenshot = np.array(sct.grab(region))
 
-
         # 2) use OCR to save this data as string (eventually float)
         # about the psm 6 stuff: https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html#page-segmentation-method
         extracted_text = pytesseract.image_to_string(screenshot, config="--psm 6 -c tessedit_char_whitelist=0123456789.").strip()
+
+        print(extracted_text)
 
         try:
             attack_speed = float(extracted_text)
@@ -56,8 +60,9 @@ def producer(queue: Queue):
         except (ValueError, TypeError) as e:
             continue
         
-        # 3) convert attack speed from float to 
+        # 3) convert attack speed from float to rgb
         (r, g, b) = speed_to_rgb(attack_speed)
+        print(f"{r}, {g}, {b}")
 
         if plus:
             print(f"|\\ Attack Speed: {attack_speed}")
