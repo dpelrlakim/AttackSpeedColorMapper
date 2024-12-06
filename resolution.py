@@ -9,29 +9,26 @@ from boxshape import BoxShape
 ################################################################################
 
 
-
 FULL_HD_MODE = 'f'
 ULTRA_WIDE_MODE = 'u'
-
 
 
 # [1] FULL_HD_READ
 FULL_HD_READ_X = 557
 FULL_HD_READ_Y = 1032
 FULL_HD_READ_WIDTH = 42
-FULL_HD_READ_HEIGHT = 21
+FULL_HD_READ_HEIGHT = 23
 FULL_HD_READ_BOX_SHAPE = BoxShape(
     FULL_HD_READ_X, 
     FULL_HD_READ_Y, 
     FULL_HD_READ_WIDTH, 
     FULL_HD_READ_HEIGHT)
 
-
 # [2] FULL_HD_WRITE
-FULL_HD_WRITE_X = 650
-FULL_HD_WRITE_Y = 945
-FULL_HD_WRITE_WIDTH = 145
-FULL_HD_WRITE_HEIGHT = 40
+FULL_HD_WRITE_X = 675
+FULL_HD_WRITE_Y = 948
+FULL_HD_WRITE_WIDTH = 125
+FULL_HD_WRITE_HEIGHT = 49
 FULL_HD_WRITE_BOX_SHAPE = BoxShape(
     FULL_HD_WRITE_X, 
     FULL_HD_WRITE_Y, 
@@ -60,6 +57,7 @@ ULTRA_WIDE_WRITE_BOX_SHAPE = BoxShape(
     ULTRA_WIDE_WRITE_Y, 
     ULTRA_WIDE_WRITE_WIDTH, 
     ULTRA_WIDE_WRITE_HEIGHT)
+
 
 # Dictionary mapping modes to their configurations
 RESOLUTION_CONFIG = {

@@ -1,6 +1,6 @@
+from queue import Queue
 import tkinter as tk
 
-from queue import Queue
 from boxshape import BoxShape
 
 
@@ -12,12 +12,27 @@ def update_overlay(queue: Queue, canvas, root):
 
     if not queue.empty():
 
+        # Get the canvas dimensions
+        canvas_width = canvas.winfo_width()
+        canvas_height = canvas.winfo_height()
+
+        # Dynamically calculate font size
+        font_size = int(canvas_height * 0.85)
+        font_size = max(16, font_size) # set minimum fontsize
+
         attack_speed, (r, g, b) = queue.get()
         canvas.configure(bg=rgb_to_hex(r, g, b))
         canvas.delete("attack_speed_text")
-        canvas.create_text(100, 36, text=attack_speed, fill="black", font=("Arial", 36), tags="attack_speed_text")
+        canvas.create_text(
+            canvas_width // 2, 
+            canvas_height // 2, 
+            text=attack_speed, 
+            fill="black", 
+            font=("Arial", font_size), 
+            tags="attack_speed_text"
+        )
         
-    root.after(100, update_overlay, queue, canvas, root)
+    root.after(30, update_overlay, queue, canvas, root)
 
 
 def consumer(queue: Queue, boxshape: BoxShape):

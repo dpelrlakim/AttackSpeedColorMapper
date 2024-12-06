@@ -1,8 +1,10 @@
 from mss import mss
+from queue import Queue
 import numpy as np
 import colorsys
 import pytesseract
-from queue import Queue
+
+import helpers
 from boxshape import BoxShape
 
 
@@ -30,11 +32,9 @@ def producer(queue: Queue, boxshape: BoxShape):
         
         screenshot = None
         with mss() as sct:
-            for i, monitor in enumerate(sct.monitors):
-                print(f"Monitor {i}: {monitor}")
 
             # [0] is the union virtual monitor. so indiv monitors index from 1.
-            monitor = sct.monitors[1]
+            monitor = sct.monitors[helpers.monitor_index]
 
             region = { # for the ultra wide monitor
                 "left": monitor["left"] + boxshape.x,
@@ -50,8 +50,6 @@ def producer(queue: Queue, boxshape: BoxShape):
         # about the psm 6 stuff: https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html#page-segmentation-method
         extracted_text = pytesseract.image_to_string(screenshot, config="--psm 6 -c tessedit_char_whitelist=0123456789.").strip()
 
-        print(extracted_text)
-
         try:
             attack_speed = float(extracted_text)
 
@@ -62,7 +60,6 @@ def producer(queue: Queue, boxshape: BoxShape):
         
         # 3) convert attack speed from float to rgb
         (r, g, b) = speed_to_rgb(attack_speed)
-        print(f"{r}, {g}, {b}")
 
         if plus:
             print(f"|\\ Attack Speed: {attack_speed}")
