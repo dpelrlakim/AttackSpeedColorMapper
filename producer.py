@@ -3,6 +3,7 @@ from queue import Queue
 import numpy as np
 import colorsys
 import pytesseract
+import time
 
 import helpers
 from boxshape import BoxShape
@@ -70,3 +71,5 @@ def producer(queue: Queue, boxshape: BoxShape):
         # 4) pass AS and color data to consumer
         if queue.empty():
             queue.put((attack_speed, (r, g, b)))
+        else:  # be nice to the computer
+            time.sleep(1)

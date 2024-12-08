@@ -1,5 +1,6 @@
 from queue import Queue
 import tkinter as tk
+import time
 
 from boxshape import BoxShape
 
@@ -9,6 +10,8 @@ def rgb_to_hex(r: int, g: int, b: int):
 
 
 def update_overlay(queue: Queue, canvas, root):
+
+    start_time = time.time()
 
     if not queue.empty():
 
@@ -31,8 +34,16 @@ def update_overlay(queue: Queue, canvas, root):
             font=("Arial", font_size), 
             tags="attack_speed_text"
         )
+    
+    else:
+        # Probably alt-tabbed. Be nice to the computer
+        time.sleep(1)
+
+    elapsed = (time.time() - start_time) * 1000  # ms
+    remaining_time = max(0, 16 - elapsed)
         
-    root.after(30, update_overlay, queue, canvas, root)
+    # 60 fps
+    root.after(int(remaining_time), update_overlay, queue, canvas, root)
 
 
 def consumer(queue: Queue, boxshape: BoxShape):
